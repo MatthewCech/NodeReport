@@ -7,7 +7,7 @@ const UPKEEP_TIME_MS = 12 * 1000;
 const MAX_DATA_AGE_MS = 30 * 1000;
 const EINK_UPDATE_TIME_MS = 60 * 1000;
 const EINK_EXTRA_ARGS = '--weight="thin"';
-const EINK_HEADER = "CPU  RAM  Name\n";
+const EINK_HEADER = "CPU  RAM    Name\n";
 
 // A record of last data received with no history
 let latestData = {};
@@ -39,26 +39,32 @@ function displayAverage() {
 	let totals = {};
 	let counts = {};
 
-	for(let i = 0; i < history.length; i++) {
-		let current = history[i];
-		if(!(current.key in totals)) {
-			totals[current.key] = {};
-			totals[current.key].ram = 0;
-			totals[current.key].cpu = 0;
-			totals[current.key].totalRam = 0;
-			counts[current.key] = 0;
-		}
+	// Add all keys present in latest.
+	let latestKeys = Object.keys(latestData);
+	for(let i = 0; i < latestKeys.length; i++) {
+		let currentData = latestData[latestKeys[i]];
+
+		totals[currentData.key] = {};
+		totals[currentData.key].ram = 0;
+		totals[currentData.key].cpu = 0;
+		totals[currentData.key].totalRam = 0;
+		counts[currentData.key] = 0;
 	}
 
+	// For each key we have in history, add it. Skip if it's not in latest.
 	for(let i = 0; i < history.length; i++) {
 		let current = history[i];
 		
-		totals[current.key].ram += Number(current.ram.used);
-		totals[current.key].cpu += Number(current.cpu.user) + Number(current.cpu.system);
-		totals[current.key].totalRam = Number(current.ram.total); // just write over with last number seen, it's fine
-		counts[current.key] += 1;
+		if(current.key in totals && current.key in counts)
+		{
+			totals[current.key].ram += Number(current.ram.used);
+			totals[current.key].cpu += Number(current.cpu.user) + Number(current.cpu.system);
+			totals[current.key].totalRam = Number(current.ram.total); // just write over with last number seen, it's fine
+			counts[current.key] += 1;
+		}
 	}
 
+	// Compose averages
 	let displayString = EINK_HEADER;
 	let keys = Object.keys(totals);
 	for(let i = 0; i < keys.length; i++) {
