@@ -1,0 +1,29 @@
+{
+  "name": "server_monitor",
+  "version": "1.0.0",
+  "description": "server to receive monitoring",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthewCech/NodeReport.git"
+  },
+  "keywords": [
+    "server",
+    "monitor",
+    "monitoring",
+    "casual"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatthewCech/NodeReport/issues"
+  },
+  "homepage": "https://github.com/MatthewCech/NodeReport#readme",
+  "dependencies": {
+    "node-events": "^0.0.2"
+  }
+}

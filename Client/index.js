@@ -68,6 +68,7 @@ setInterval(function() {
 	getRAMInfo(ramInfo => {
 		getCPUInfo(cpuInfo => {
 			let blob = {};
+			blob.key = config.machineKey;
 			blob.ram = ramInfo;
 			blob.cpu = cpuInfo;
 
