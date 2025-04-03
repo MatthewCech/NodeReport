@@ -3,7 +3,7 @@ let execSync = require('child_process').execSync; // Cxecuting commands, in this
 const querystring = require('querystring');       // URL unescape
 
 const PORT = 1234;
-const EINK_UPDATE_TIME_MS = 120 * 1000;
+const EINK_UPDATE_TIME_MS = 60 * 1000;
 const UPKEEP_TIME_MS = 30 * 1000;
 const MAX_DATA_AGE_MS = 120 * 1000;
 
@@ -12,8 +12,9 @@ let trackedData = {};
 
 // Lean on a system call to write out to the python display
 function writeEInk(stringToWrite) {
-	console.log(`----- [Trying to write...]\n${stringToWrite}\n-----`)
+	console.log("----- [Trying to write to e-ink]");
 	console.log(stringToWrite)
+	console.log("-----");
 
 	try {
 		execSync(`python display.py -t"${stringToWrite}"`);
@@ -58,6 +59,23 @@ console.log(`Server running on port ${PORT}`);
 // E-ink update cycle
 setInterval(function() {
 	console.log(`updating e-ink display with the following:\n${JSON.stringify(trackedData)}`)
+
+	let displayString = "";
+
+	let keys = Object.keys(trackedData);
+	for(let i = 0; i < keys.length; i++) {
+		let currentData = trackedData[keys[i]];
+		
+		let line = "";
+		line += `C:${(Number(currentData.cpu.user) + Number(currentData.cpu.system)).toFixed(0)}% `;
+		line += `M:${(Number(currentData.ram.used) / Number(currentData.ram.total) * 100).toFixed(0)}% `;
+		line += `${keys[i]}`;
+
+		displayString += line + "\n";
+	}
+
+	writeEInk(displayString);
+
 }, EINK_UPDATE_TIME_MS);
 
 
@@ -75,6 +93,7 @@ setInterval(function() {
 			delete trackedData[keys[i]];
 		}
 	}
+
 	console.log(`Data after: ${JSON.stringify(trackedData)}`);
 	console.log("-----")
 }, UPKEEP_TIME_MS);
