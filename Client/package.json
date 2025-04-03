@@ -1,0 +1,28 @@
+{
+  "name": "client_monitor",
+  "version": "1.0.0",
+  "description": "client monitoring",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthewCech/NodeReport.git"
+  },
+  "keywords": [
+    "monitoring",
+    "monitor",
+    "casual"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatthewCech/NodeReport/issues"
+  },
+  "homepage": "https://github.com/MatthewCech/NodeReport#readme",
+  "dependencies": {
+    "request": "^2.88.2",
+    "systeminformation": "^5.25.11"
+  }
+}
